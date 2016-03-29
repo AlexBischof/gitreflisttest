@@ -38,19 +38,18 @@ public class Grep {
         try (Git git = new Git(repository);
              ObjectReader objectReader = repository.newObjectReader()) {
             return stream(git.log().all().call().spliterator(), false)
-                    .map(revCommit -> impl(objectReader, revCommit))
+                    .map(revCommit -> walk(objectReader, revCommit))
                     .filter(strings -> !strings.isEmpty())
                     .collect(toList());
         }
     }
 
-    private List<String> impl(ObjectReader objectReader, RevCommit revCommit) {
+    private List<String> walk(ObjectReader objectReader, RevCommit revCommit) {
         try {
             TreeWalk treeWalk = new TreeWalk(objectReader);
 
             CanonicalTreeParser treeParser = new CanonicalTreeParser();
             treeParser.reset(objectReader, revCommit.getTree());
-
             int treeIndex = treeWalk.addTree(treeParser);
             treeWalk.setRecursive(true);
 

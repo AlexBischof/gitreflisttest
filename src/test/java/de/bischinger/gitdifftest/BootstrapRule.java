@@ -70,7 +70,6 @@ public class BootstrapRule implements TestRule {
         //add
         git.add().addFilepattern("exportfile").call();
 
-
         //commit
         git.commit().setMessage(commitMessage).call();
     }
